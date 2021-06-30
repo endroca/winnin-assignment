@@ -12,3 +12,16 @@ provider "aws" {
   profile = "default"
   region  = var.region
 }
+
+# Invoke lambda first apply
+module "execute" {
+  source              ="connect-group/lambda-exec/aws"
+  name                = "lambda_execution"
+  lambda_function_arn = aws_lambda_function.get_data_from_external_api.arn
+
+  lambda_inputs = {
+    run_on_every_apply = timestamp()
+  }
+
+  lambda_outputs = []
+}

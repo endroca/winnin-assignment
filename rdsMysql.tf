@@ -6,7 +6,7 @@ resource "aws_security_group" "rds_group" {
     from_port       = 0
     to_port         = 0
     protocol        = "-1"
-    cidr_blocks     = ["127.0.0.1/32"]
+    cidr_blocks     = ["0.0.0.0/0"]
     self = true
   }
 
@@ -28,5 +28,6 @@ resource "aws_db_instance" "rds" {
   password             = "${var.rds.password}"
   parameter_group_name = "${var.rds.parameter_group_name}"
   skip_final_snapshot  = true
+  publicly_accessible  = true
   vpc_security_group_ids = [aws_security_group.rds_group.id]
 }

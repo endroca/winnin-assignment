@@ -29,7 +29,7 @@ resource "aws_lambda_function" "get_data_from_external_api"{
   description   = var.lambda_get_from_api.description
   handler       = var.lambda_get_from_api.handler
   runtime       = var.lambda_get_from_api.runtime
-  source_code_hash = base64sha256("${var.lambda_get_from_api.path}.zip")
+  source_code_hash = filebase64sha256("${var.lambda_get_from_api.path}.zip")
 
   environment {
     variables = {
@@ -41,10 +41,11 @@ resource "aws_lambda_function" "get_data_from_external_api"{
   }
 }
 
+# Invoke cloudwatch
 resource "aws_cloudwatch_event_rule" "every_day" {
     name = "every-day"
     description = "Fires every day"
-    schedule_expression = "rate(1 day)"
+    schedule_expression = var.lambda_get_from_api.schedule_expression
 }
 
 resource "aws_cloudwatch_event_target" "cloudwatch_event_target_every_day" {

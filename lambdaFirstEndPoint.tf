@@ -29,7 +29,7 @@ resource "aws_lambda_function" "first_endpoint_api"{
   description   = var.lambda_first_endpoint.description
   handler       = var.lambda_first_endpoint.handler
   runtime       = var.lambda_first_endpoint.runtime
-  source_code_hash = base64sha256("${var.lambda_first_endpoint.path}.zip")
+  source_code_hash = filebase64sha256("${var.lambda_first_endpoint.path}.zip")
 
   environment {
     variables = {

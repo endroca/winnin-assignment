@@ -25,7 +25,7 @@ exports.handler = async (_) => {
   try {
     // Connect in DB
     const connection = await mysql.createConnection({
-      host: process.env.rds_endpoint,
+      host: process.env.rds_endpoint.replace(":3306", ""),
       user: process.env.db_username,
       password: process.env.db_password,
       multipleStatements: true,

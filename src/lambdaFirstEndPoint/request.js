@@ -8,43 +8,47 @@ const validationException = (message) => {
 };
 
 exports.handler = async (event) => {
-  // TODO implement
-  const { initial_date, final_date, order } = event["queryStringParameters"];
+  try {
+    // TODO implement
+    const { initial_date, final_date, order } =
+      event["queryStringParameters"] || {};
 
-  if (!initial_date || !final_date || !order) {
-    return validationException(
-      "initial_date, final_date and order are required"
-    );
-  }
+    if (!initial_date || !final_date || !order) {
+      return validationException(
+        "initial_date, final_date and order are required"
+      );
+    }
 
-  if (order !== "ups" && order !== "num_comments") {
-    return validationException("order does not have a valid value");
-  }
+    if (order !== "ups" && order !== "num_comments") {
+      return validationException("order does not have a valid value");
+    }
 
-  // Connect in DB
-  const connection = await mysql.createConnection({
-    host: process.env.rds_endpoint,
-    user: process.env.db_username,
-    password: process.env.db_password,
-    multipleStatements: true,
-  });
+    // Connect in DB
+    const connection = await mysql.createConnection({
+      host: process.env.rds_endpoint.replace(":3306", ""),
+      user: process.env.db_username,
+      password: process.env.db_password,
+      multipleStatements: true,
+    });
 
-  const sql = `SELECT * FROM db.posts WHERE 
+    const sql = `SELECT * FROM db.posts WHERE 
   (created BETWEEN STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s'))
-  ORDER BY ? desc`;
+  ORDER BY ${order} DESC`;
 
-  const [rows, _] = await connection.execute(sql, [
-    initial_date,
-    final_date,
-    order,
-  ]);
+    const [rows, _] = await connection.execute(sql, [initial_date, final_date]);
 
-  await connection.end();
+    await connection.end();
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(rows),
-  };
+    return {
+      statusCode: 200,
+      body: JSON.stringify(rows),
+    };
+  } catch (e) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: e }),
+    };
+  }
 };
 
 // (async () => {
