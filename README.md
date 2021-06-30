@@ -41,8 +41,8 @@ GET firstEndPoint/?initial_date=2017-01-01 00:00:00&final_date=2021-06-29 03:00:
 
 | Parameter      | Type     | Description                            |
 | :------------- | :------- | :------------------------------------- |
-| `initial_date` | `string` | **Required**, YYYY-mm-dd hh:mm:ss user |
-| `final_date`   | `string` | **Required**, YYYY-mm-dd hh:mm:ss name |
+| `initial_date` | `string` | **Required**, YYYY-mm-dd hh:mm:ss |
+| `final_date`   | `string` | **Required**, YYYY-mm-dd hh:mm:ss |
 | `order`        | `string` | **Required**, ups or num_comments      |
 
 ```http
