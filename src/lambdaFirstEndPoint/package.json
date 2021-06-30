@@ -1,15 +1,15 @@
 {
-  "name": "lambda-get-from-api",
+  "name": "lambdaapi",
   "version": "1.0.0",
-  "main": "request.js",
-  "license": "MIT",
-  "dependencies": {
-    "mysql2": "^2.2.5"
-  },
+  "description": "",
+  "main": "api.js",
   "scripts": {
     "deps": "npm install --platform=linux --arch=x64 --target=14.0.0 mysql2"
   },
   "keywords": [],
   "author": "",
-  "description": ""
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^2.2.5"
+  }
 }

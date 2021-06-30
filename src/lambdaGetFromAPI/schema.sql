@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS `db`.`posts` (
   `ups` int(11) NOT NULL,
   `num_comments` int(11) NOT NULL,
   `created` timestamp NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE `title_unique` (`title`)
 ) ENGINE=InnoDB;

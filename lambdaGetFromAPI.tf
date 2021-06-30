@@ -1,17 +1,35 @@
-data "archive_file" "lambda" {
+data "archive_file" "archive_file_get_api" {
   type = "zip"
   source_dir = var.lambda_get_from_api.path
-  output_path = "get_data_from_external_api.zip"
+  output_path = "${var.lambda_get_from_api.path}.zip"
+}
+
+resource "aws_iam_role" "iam_for_lambda_ext_api" {
+  name = "iam_for_lambda_ext_api"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      },
+    ]
+  })
 }
 
 resource "aws_lambda_function" "get_data_from_external_api"{
-  role          = aws_iam_role.iam_for_lambda.arn
+  role          = aws_iam_role.iam_for_lambda_ext_api.arn
   function_name = var.lambda_get_from_api.function_name
-  filename      = "get_data_from_external_api.zip"
+  filename      = "${var.lambda_get_from_api.path}.zip"
   description   = var.lambda_get_from_api.description
-  handler       = "get_data_from_external_api.handle"
+  handler       = var.lambda_get_from_api.handler
   runtime       = var.lambda_get_from_api.runtime
-  source_code_hash = base64sha256("get_data_from_external_api.zip")
+  source_code_hash = base64sha256("${var.lambda_get_from_api.path}.zip")
 
   environment {
     variables = {
@@ -40,23 +58,4 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_cloudwatch_event" {
     function_name = aws_lambda_function.get_data_from_external_api.function_name
     principal = "events.amazonaws.com"
     source_arn = aws_cloudwatch_event_rule.every_day.arn
-}
-
-
-resource "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-      },
-    ]
-  })
 }

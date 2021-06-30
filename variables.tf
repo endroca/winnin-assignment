@@ -7,7 +7,18 @@ variable "lambda_get_from_api" {
     runtime = "nodejs14.x"
     function_name = "get_data_from_external_api"
     path = "src/lambdaGetFromAPI"
+    handler = "request.handler"
     description = "get data from an external API"
+  }
+}
+
+variable "lambda_first_endpoint" {
+  default = {
+    runtime = "nodejs14.x"
+    function_name = "first_endpoint"
+    path = "src/lambdaFirstEndPoint"
+    handler = "request.handler"
+    description = "get data from rds"
   }
 }
 

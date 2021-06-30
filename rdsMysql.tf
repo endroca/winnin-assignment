@@ -29,8 +29,4 @@ resource "aws_db_instance" "rds" {
   parameter_group_name = "${var.rds.parameter_group_name}"
   skip_final_snapshot  = true
   vpc_security_group_ids = [aws_security_group.rds_group.id]
-
-  provisioner "local-exec" {
-    command = "mysql --host=${self.address} --port=${self.port} --user=${self.username} --password=${self.password} < ./schema.sql"
-  }
 }
