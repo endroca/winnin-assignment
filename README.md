@@ -22,6 +22,9 @@ cd ..
 terraform init
 terraform plan
 terraform apply
+
+# First invocation or wait for the first schedule
+aws lambda invoke --function-name get_data_from_external_api out --log-type Tail --query 'LogResult' --output text |  base64 -d
 ```
 
 ## Shutdown
